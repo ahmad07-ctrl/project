@@ -3,192 +3,423 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portail Universitaire - Génie Électrique</title>
+    <title>Portail Universitaire ESP - Scolarité, Cours & Notes</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         * { font-family: 'Plus Jakarta Sans', sans-serif; box-sizing: border-box; }
-        .active-tab { background-color: #3b82f6 !important; color: #ffffff !important; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .active-tab { background-color: #2563eb !important; color: #ffffff !important; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25); }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased">
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased selection:bg-blue-500 selection:text-white">
 
-    <!-- NAVBAR -->
-    <header class="bg-slate-900 text-white sticky top-0 z-50 shadow-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="bg-blue-600 text-white p-2 rounded-lg font-bold text-xl">
-                    <i class="fa-solid fa-graduation-cap"></i>
-                </div>
-                <div>
-                    <h1 class="font-bold text-lg leading-tight">Portail Universitaire</h1>
-                    <p class="text-xs text-slate-400">École Supérieure Polytechnique</p>
-                </div>
-            </div>
+    <!-- APP CONTAINER -->
+    <div id="app" class="min-h-screen flex flex-col">
 
-            <div class="flex items-center space-x-4">
-                <div class="flex items-center space-x-3 border-l border-slate-700 pl-4">
-                    <div class="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center font-bold text-sm">
-                        AD
+        <!-- SCREEN 1: AUTHENTIFICATION (LOGIN / REGISTER) -->
+        <div id="auth-screen" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-blue-950 p-4">
+            <div class="bg-white/95 backdrop-blur-md w-full max-w-md rounded-2xl shadow-2xl border border-slate-700/30 overflow-hidden">
+                <!-- Header Auth -->
+                <div class="bg-slate-900 p-6 text-center text-white border-b border-slate-800">
+                    <div class="w-14 h-14 bg-blue-600 rounded-2xl mx-auto flex items-center justify-center text-2xl font-black mb-3 shadow-lg shadow-blue-500/30">
+                        <i class="fa-solid fa-graduation-cap"></i>
                     </div>
-                    <div class="hidden md:block text-left">
-                        <div class="text-sm font-semibold leading-none">Amadou Diallo</div>
-                        <div class="text-xs text-slate-400 mt-1">Génie Électrique</div>
+                    <h2 class="text-xl font-bold">Portail Universitaire</h2>
+                    <p class="text-xs text-blue-300 mt-1">École Supérieure Polytechnique — Génie Électrique</p>
+                </div>
+
+                <!-- Body Auth Form -->
+                <div class="p-6 sm:p-8 space-y-6">
+                    <!-- Toggle Login / Register -->
+                    <div class="flex bg-slate-100 p-1 rounded-xl">
+                        <button id="btn-tab-login" onclick="toggleAuthMode('login')" class="flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-700 bg-white shadow-sm">Se Connecter</button>
+                        <button id="btn-tab-register" onclick="toggleAuthMode('register')" class="flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-500 hover:text-slate-800">S'inscrire</button>
+                    </div>
+
+                    <!-- FORM COMMUM -->
+                    <form id="auth-form" onsubmit="handleAuth(event)" class="space-y-4">
+                        <!-- Champ Nom (visible seulement à l'inscription) -->
+                        <div id="field-fullname" class="hidden">
+                            <label class="block text-xs font-bold text-slate-600 mb-1">Nom Complet</label>
+                            <div class="relative">
+                                <i class="fa-solid fa-user absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                                <input type="text" id="auth-name" placeholder="ex: Amadou Tidiane Diallo" class="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none">
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">Adresse Email Universitaire</label>
+                            <div class="relative">
+                                <i class="fa-solid fa-envelope absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                                <input type="email" id="auth-email" required placeholder="nom@esp.sn" class="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none">
+                            </div>
+                        </div>
+
+                        <!-- Mot de passe -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">Mot de Passe</label>
+                            <div class="relative">
+                                <i class="fa-solid fa-lock absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                                <input type="password" id="auth-password" required placeholder="••••••••" class="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none">
+                            </div>
+                        </div>
+
+                        <!-- Sélection du rôle -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">Rôle / Espace</label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <label class="flex items-center justify-center p-3 border rounded-xl cursor-pointer hover:border-blue-500 transition has-[:checked]:border-blue-600 has-[:checked]:bg-blue-50/50">
+                                    <input type="radio" name="auth-role" value="student" checked class="hidden">
+                                    <div class="text-center">
+                                        <i class="fa-solid fa-user-graduate text-lg text-blue-600 block mb-1"></i>
+                                        <span class="text-xs font-bold">Étudiant</span>
+                                    </div>
+                                </label>
+                                <label class="flex items-center justify-center p-3 border rounded-xl cursor-pointer hover:border-blue-500 transition has-[:checked]:border-blue-600 has-[:checked]:bg-blue-50/50">
+                                    <input type="radio" name="auth-role" value="teacher" class="hidden">
+                                    <div class="text-center">
+                                        <i class="fa-solid fa-chalkboard-user text-lg text-indigo-600 block mb-1"></i>
+                                        <span class="text-xs font-bold">Enseignant</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Bouton Soumettre -->
+                        <button type="submit" id="auth-submit-btn" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 transition text-sm">
+                            Se Connecter
+                        </button>
+                    </form>
+
+                    <!-- Comptes Démo Raccourcis -->
+                    <div class="border-t border-slate-100 pt-4 text-center">
+                        <p class="text-xs text-slate-400 mb-2 font-medium">Test rapide (Comptes Démo) :</p>
+                        <div class="flex justify-center gap-2">
+                            <button onclick="loginAsDemo('student')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition">
+                                <i class="fa-solid fa-user-graduate mr-1"></i> Accès Étudiant
+                            </button>
+                            <button onclick="loginAsDemo('teacher')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition">
+                                <i class="fa-solid fa-chalkboard-user mr-1"></i> Accès Enseignant
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </header>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full flex flex-col md:flex-row gap-8">
-        
-        <!-- SIDEBAR DE NAVIGATION -->
-        <aside class="w-full md:w-64 flex-shrink-0 space-y-2">
-            <div class="bg-white rounded-xl p-3 shadow-sm border border-slate-200 space-y-1">
-                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="active-tab w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium transition text-left">
-                    <i class="fa-solid fa-chart-pie w-5"></i>
-                    <span>Tableau de bord</span>
-                </button>
-                <button onclick="switchTab('courses')" id="nav-courses" class="text-slate-600 hover:bg-slate-100 w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium transition text-left">
-                    <i class="fa-solid fa-book-open w-5"></i>
-                    <span>Mes Cours</span>
-                </button>
-                <button onclick="switchTab('grades')" id="nav-grades" class="text-slate-600 hover:bg-slate-100 w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium transition text-left">
-                    <i class="fa-solid fa-clipboard-list w-5"></i>
-                    <span>Notes & Relevés</span>
-                </button>
-                <button onclick="switchTab('schedule')" id="nav-schedule" class="text-slate-600 hover:bg-slate-100 w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium transition text-left">
-                    <i class="fa-solid fa-calendar-alt w-5"></i>
-                    <span>Emploi du temps</span>
-                </button>
-            </div>
-        </aside>
-
-        <!-- CONTENU DYNAMIQUE -->
-        <main class="flex-1 space-y-6">
+        <!-- SCREEN 2: MAIN DASHBOARD (HIDDEN INITIALEMENT) -->
+        <div id="main-screen" class="hidden min-h-screen flex flex-col">
             
-            <!-- VUE 1 : TABLEAU DE BORD -->
-            <section id="view-dashboard" class="space-y-6">
-                <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-6 text-white shadow-lg">
-                    <h2 class="text-2xl font-bold">Bienvenue sur votre espace, Amadou 👋</h2>
-                    <p class="text-blue-100 text-sm mt-1">Consultez l'avancement de vos modules et gérez vos notes en temps réel.</p>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+            <!-- HEADER APP -->
+            <header class="bg-slate-900 text-white sticky top-0 z-50 shadow-md">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-blue-600 text-white p-2 rounded-xl flex items-center justify-center font-bold text-lg shadow-sm">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
                         <div>
-                            <p class="text-xs font-semibold text-slate-500 uppercase">Moyenne Générale</p>
-                            <p id="stat-moyenne" class="text-2xl font-extrabold text-slate-900 mt-1">15.8 / 20</p>
-                        </div>
-                        <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center text-xl">
-                            <i class="fa-solid fa-chart-line"></i>
+                            <h1 class="font-bold text-base sm:text-lg leading-tight">Portail Universitaire</h1>
+                            <p class="text-xs text-slate-400 hidden sm:block">École Supérieure Polytechnique — Génie Électrique</p>
                         </div>
                     </div>
-                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
-                        <div>
-                            <p class="text-xs font-semibold text-slate-500 uppercase">Crédits (ECTS)</p>
-                            <p class="text-2xl font-extrabold text-slate-900 mt-1">45 / 60</p>
+
+                    <!-- User Profile & Logout -->
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center space-x-3 border-l border-slate-700 pl-4">
+                            <div id="user-avatar" class="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center font-bold text-sm">
+                                AD
+                            </div>
+                            <div class="hidden sm:block text-left">
+                                <div id="user-display-name" class="text-sm font-semibold leading-none">Amadou Diallo</div>
+                                <div id="user-display-role" class="text-xs text-blue-400 font-medium mt-1">Étudiant</div>
+                            </div>
                         </div>
-                        <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-xl">
-                            <i class="fa-solid fa-award"></i>
-                        </div>
-                    </div>
-                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
-                        <div>
-                            <p class="text-xs font-semibold text-slate-500 uppercase">Modules Validés</p>
-                            <p id="stat-modules" class="text-2xl font-extrabold text-slate-900 mt-1">4 / 4</p>
-                        </div>
-                        <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center text-xl">
-                            <i class="fa-solid fa-check-circle"></i>
-                        </div>
+                        <button onclick="logout()" title="Déconnexion" class="p-2 text-slate-400 hover:text-red-400 rounded-lg hover:bg-slate-800 transition">
+                            <i class="fa-solid fa-right-from-bracket text-lg"></i>
+                        </button>
                     </div>
                 </div>
-            </section>
+            </header>
 
-            <!-- VUE 2 : MES COURS -->
-            <section id="view-courses" class="hidden space-y-4">
-                <h3 class="text-xl font-bold text-slate-800">Mes Modules d'Enseignement</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-                        <span class="text-xs bg-blue-100 text-blue-700 font-semibold px-2.5 py-1 rounded-full">GE-401</span>
-                        <h4 class="font-bold text-lg mt-2">Électronique de Puissance</h4>
-                        <p class="text-sm text-slate-500 mt-1">Hacheurs, Onduleurs, Redresseurs et conversion d'énergie.</p>
-                    </div>
-                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-                        <span class="text-xs bg-emerald-100 text-emerald-700 font-semibold px-2.5 py-1 rounded-full">GE-402</span>
-                        <h4 class="font-bold text-lg mt-2">Systèmes Embarqués (ESP32)</h4>
-                        <p class="text-sm text-slate-500 mt-1">Programmation C/C++, Microcontrôleurs et IOT.</p>
-                    </div>
-                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-                        <span class="text-xs bg-purple-100 text-purple-700 font-semibold px-2.5 py-1 rounded-full">GE-403</span>
-                        <h4 class="font-bold text-lg mt-2">Modélisation des Machines</h4>
-                        <p class="text-sm text-slate-500 mt-1">Machines asynchrones, synchrones et régulation.</p>
-                    </div>
-                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-                        <span class="text-xs bg-amber-100 text-amber-700 font-semibold px-2.5 py-1 rounded-full">GE-404</span>
-                        <h4 class="font-bold text-lg mt-2">Automatique & Asservissement</h4>
-                        <p class="text-sm text-slate-500 mt-1">Systèmes linéaires, Transformée de Laplace, Correcteurs PID.</p>
-                    </div>
-                </div>
-            </section>
+            <!-- CONTENU AVEC SIDEBAR ET MAIN -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex-1 w-full flex flex-col md:flex-row gap-6">
+                
+                <!-- SIDEBAR -->
+                <aside class="w-full md:w-64 flex-shrink-0 space-y-3">
+                    <div class="bg-white rounded-2xl p-3 shadow-sm border border-slate-200 space-y-1">
+                        <!-- Navigation Commune -->
+                        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="active-tab w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition text-left">
+                            <i class="fa-solid fa-chart-pie w-5"></i>
+                            <span>Tableau de bord</span>
+                        </button>
 
-            <!-- VUE 3 : NOTES ET CALCULATEUR -->
-            <section id="view-grades" class="hidden space-y-6">
-                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-                    <h3 class="text-lg font-bold text-slate-800 mb-4"><i class="fa-solid fa-plus-circle text-blue-600 mr-2"></i>Ajouter une note pour tester le calcul</h3>
-                    <form id="grade-form" onsubmit="addGrade(event)" class="grid grid-cols-1 sm:grid-cols-4 gap-3">
-                        <input type="text" id="subject" placeholder="Matière" required class="border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                        <input type="number" id="note" step="0.5" min="0" max="20" placeholder="Note / 20" required class="border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                        <input type="number" id="coeff" min="1" max="10" placeholder="Coefficient" required class="border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                        <button type="submit" class="bg-blue-600 text-white font-semibold rounded-lg px-4 py-2 text-sm hover:bg-blue-700 transition">Ajouter</button>
-                    </form>
-                </div>
+                        <button onclick="switchTab('courses')" id="nav-courses" class="text-slate-600 hover:bg-slate-100 w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition text-left">
+                            <i class="fa-solid fa-book-open w-5"></i>
+                            <span>Mes Cours & TP</span>
+                        </button>
 
-                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                    <table class="w-full text-left text-sm text-slate-600">
-                        <thead class="bg-slate-50 text-xs font-semibold text-slate-500 uppercase border-b">
-                            <tr>
-                                <th class="px-6 py-3">Matière</th>
-                                <th class="px-6 py-3">Coeff.</th>
-                                <th class="px-6 py-3">Note</th>
-                                <th class="px-6 py-3 text-right">Statut</th>
-                            </tr>
-                        </thead>
-                        <tbody id="grades-table-body" class="divide-y divide-slate-200">
-                            <!-- Les lignes seront insérées dynamiquement via JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-            </section>
+                        <button onclick="switchTab('grades')" id="nav-grades" class="text-slate-600 hover:bg-slate-100 w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition text-left">
+                            <i class="fa-solid fa-clipboard-list w-5"></i>
+                            <span id="label-nav-grades">Notes & Relevés</span>
+                        </button>
 
-            <!-- VUE 4 : EMPLOI DU TEMPS -->
-            <section id="view-schedule" class="hidden space-y-4">
-                <h3 class="text-xl font-bold text-slate-800">Planning de la semaine</h3>
-                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-3">
-                    <div class="flex items-center justify-between border-b pb-3">
-                        <div>
-                            <span class="font-bold text-blue-600">Lundi 08:30 - 11:30</span>
-                            <p class="font-medium text-slate-800">Électronique de Puissance (TP)</p>
+                        <button onclick="switchTab('todo')" id="nav-todo" class="text-slate-600 hover:bg-slate-100 w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition text-left">
+                            <i class="fa-solid fa-list-check w-5"></i>
+                            <span>Tâches à faire</span>
+                            <span id="badge-todo-count" class="ml-auto bg-blue-100 text-blue-700 text-xs font-bold px-2 py-0.5 rounded-full">0</span>
+                        </button>
+
+                        <button onclick="switchTab('schedule')" id="nav-schedule" class="text-slate-600 hover:bg-slate-100 w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition text-left">
+                            <i class="fa-solid fa-calendar-alt w-5"></i>
+                            <span>Emploi du temps</span>
+                        </button>
+                    </div>
+
+                    <!-- Encart Rôle Actif -->
+                    <div id="sidebar-role-badge" class="bg-blue-50 border border-blue-200 rounded-2xl p-4 text-xs text-blue-900 space-y-1">
+                        <div class="font-bold flex items-center gap-2 text-sm text-blue-700">
+                            <i class="fa-solid fa-shield-halved"></i> Espace Actif
                         </div>
-                        <span class="text-xs bg-slate-100 text-slate-600 px-3 py-1 rounded-full">Salle Labo 2</span>
+                        <p id="sidebar-role-desc">Connecté en tant qu'Étudiant en Génie Électrique.</p>
                     </div>
-                    <div class="flex items-center justify-between border-b pb-3">
-                        <div>
-                            <span class="font-bold text-emerald-600">Mardi 14:00 - 17:00</span>
-                            <p class="font-medium text-slate-800">Systèmes Embarqués ESP32 (Projet)</p>
-                        </div>
-                        <span class="text-xs bg-slate-100 text-slate-600 px-3 py-1 rounded-full">Atelier Info</span>
-                    </div>
-                </div>
-            </section>
+                </aside>
 
-        </main>
+                <!-- MAIN DISPLAY -->
+                <main class="flex-1 space-y-6">
+
+                    <!-- VUE 1 : TABLEAU DE BORD -->
+                    <section id="view-dashboard" class="space-y-6">
+                        <!-- Banner -->
+                        <div class="bg-gradient-to-r from-blue-600 via-indigo-600 to-slate-900 rounded-2xl p-6 text-white shadow-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                            <div>
+                                <h2 class="text-xl sm:text-2xl font-black">Bienvenue, <span id="dash-welcome-name">Amadou</span> 👋</h2>
+                                <p id="dash-welcome-role" class="text-blue-100 text-xs sm:text-sm mt-1">Espace de gestion académique et suivi des notes.</p>
+                            </div>
+                            <span id="dash-role-tag" class="bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-xl text-xs font-bold tracking-wide uppercase">Étudiant</span>
+                        </div>
+
+                        <!-- Stats Cards -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Moyenne Générale</p>
+                                    <p id="stat-moyenne" class="text-2xl font-black text-slate-900 mt-1">15.8 / 20</p>
+                                </div>
+                                <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-xl font-bold">
+                                    <i class="fa-solid fa-chart-line"></i>
+                                </div>
+                            </div>
+                            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Tâches Restantes</p>
+                                    <p id="stat-pending-todos" class="text-2xl font-black text-slate-900 mt-1">0</p>
+                                </div>
+                                <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center text-xl font-bold">
+                                    <i class="fa-solid fa-clock-rotate-left"></i>
+                                </div>
+                            </div>
+                            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Modules Enregistrés</p>
+                                    <p id="stat-modules-count" class="text-2xl font-black text-slate-900 mt-1">4</p>
+                                </div>
+                                <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-xl font-bold">
+                                    <i class="fa-solid fa-book"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Aperçu rapide des notes -->
+                        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-4">
+                            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                                <h3 class="font-bold text-slate-800 text-base">Aperçu Récent des Notes</h3>
+                                <button onclick="switchTab('grades')" class="text-xs font-bold text-blue-600 hover:text-blue-700">Voir tout →</button>
+                            </div>
+                            <div id="dash-quick-grades" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <!-- Injecté dynamiquement -->
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- VUE 2 : MES COURS ET TP -->
+                    <section id="view-courses" class="hidden space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xl font-black text-slate-800">Modules d'Enseignement & Travaux Pratiques</h3>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs bg-blue-100 text-blue-700 font-bold px-2.5 py-1 rounded-lg">GE-401</span>
+                                    <span class="text-xs text-slate-400 font-semibold">Coeff. 4</span>
+                                </div>
+                                <h4 class="font-bold text-lg text-slate-900">Électronique de Puissance</h4>
+                                <p class="text-xs text-slate-500">Hacheurs, Onduleurs, Redresseurs commandés et conversion d'énergie électrique.</p>
+                                <div class="pt-2 flex items-center gap-2 text-xs font-semibold text-slate-600">
+                                    <i class="fa-solid fa-chalkboard-user text-blue-600"></i> Prof. O. Ba
+                                </div>
+                            </div>
+                            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs bg-emerald-100 text-emerald-700 font-bold px-2.5 py-1 rounded-lg">GE-402</span>
+                                    <span class="text-xs text-slate-400 font-semibold">Coeff. 3</span>
+                                </div>
+                                <h4 class="font-bold text-lg text-slate-900">Systèmes Embarqués (ESP32)</h4>
+                                <p class="text-xs text-slate-500">Microcontrôleurs, Programmation C/C++, Capteurs et Réseaux IoT.</p>
+                                <div class="pt-2 flex items-center gap-2 text-xs font-semibold text-slate-600">
+                                    <i class="fa-solid fa-chalkboard-user text-emerald-600"></i> Dr. Ndiaye
+                                </div>
+                            </div>
+                            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs bg-purple-100 text-purple-700 font-bold px-2.5 py-1 rounded-lg">GE-403</span>
+                                    <span class="text-xs text-slate-400 font-semibold">Coeff. 3</span>
+                                </div>
+                                <h4 class="font-bold text-lg text-slate-900">Modélisation des Machines Électriques</h4>
+                                <p class="text-xs text-slate-500">Équations de Park, Machines asynchrones et régulation de vitesse.</p>
+                                <div class="pt-2 flex items-center gap-2 text-xs font-semibold text-slate-600">
+                                    <i class="fa-solid fa-chalkboard-user text-purple-600"></i> Prof. Kane
+                                </div>
+                            </div>
+                            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs bg-amber-100 text-amber-700 font-bold px-2.5 py-1 rounded-lg">GE-404</span>
+                                    <span class="text-xs text-slate-400 font-semibold">Coeff. 3</span>
+                                </div>
+                                <h4 class="font-bold text-lg text-slate-900">Automatique & Asservissements</h4>
+                                <p class="text-xs text-slate-500">Transformée de Laplace, réponse fréquentielle et correcteurs PID.</p>
+                                <div class="pt-2 flex items-center gap-2 text-xs font-semibold text-slate-600">
+                                    <i class="fa-solid fa-chalkboard-user text-amber-600"></i> Dr. Sow
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- VUE 3 : NOTES (ÉVOLUTIF SELON ÉTUDIANT OU ENSEIGNANT) -->
+                    <section id="view-grades" class="hidden space-y-6">
+                        <!-- Formulaire d'attribution (Seulement pour Enseignant ou Simulation Étudiant) -->
+                        <div id="section-add-grade" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                            <h3 id="form-grade-title" class="text-base font-bold text-slate-800 flex items-center gap-2">
+                                <i class="fa-solid fa-pen-to-square text-blue-600"></i> Enregistrer une Nouvelle Note
+                            </h3>
+                            <form id="grade-form" onsubmit="addGrade(event)" class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                                <input type="text" id="grade-subject" placeholder="Matière / Module" required class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                                <input type="number" id="grade-val" step="0.25" min="0" max="20" placeholder="Note / 20" required class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                                <input type="number" id="grade-coeff" min="1" max="10" placeholder="Coeff." required class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl px-4 py-2 text-sm transition shadow-md shadow-blue-500/20">
+                                    Enregistrer Note
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Tableau de Relevé -->
+                        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+                                <h3 class="font-bold text-slate-800 text-base">Relevé Récapitulatif</h3>
+                                <span id="grade-count-badge" class="text-xs bg-slate-100 text-slate-600 font-bold px-3 py-1 rounded-full">4 Notes</span>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-sm text-slate-600">
+                                    <thead class="bg-slate-50 text-xs font-bold text-slate-400 uppercase border-b border-slate-100">
+                                        <tr>
+                                            <th class="px-6 py-3">Matière / Module</th>
+                                            <th class="px-6 py-3">Coeff.</th>
+                                            <th class="px-6 py-3">Note Obtenue</th>
+                                            <th class="px-6 py-3 text-right">Statut Validation</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="grades-table-body" class="divide-y divide-slate-100">
+                                        <!-- Injecté dynamiquement -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- VUE 4 : GESTION DES TÂCHES (TODO LIST COMPLÈTE) -->
+                    <section id="view-todo" class="hidden space-y-6">
+                        <!-- Formulaire d'ajout de tâche -->
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                            <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                                <i class="fa-solid fa-square-plus text-blue-600"></i> Ajouter une Tâche ou Devoir
+                            </h3>
+                            <form onsubmit="addTodo(event)" class="flex flex-col sm:flex-row gap-3">
+                                <input type="text" id="todo-text" placeholder="ex: Réviser le TP d'Électronique de Puissance..." required class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl px-6 py-2.5 text-sm transition shadow-md shadow-blue-500/20 whitespace-nowrap">
+                                    Ajouter Tâche
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Liste des Tâches -->
+                        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-3">
+                            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                                <h3 class="font-bold text-slate-800 text-base">Liste des Choses à Faire</h3>
+                                <span class="text-xs text-slate-400 font-medium">Cliquez sur une case pour valider</span>
+                            </div>
+                            <div id="todo-list-container" class="space-y-2">
+                                <!-- Injecté dynamiquement -->
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- VUE 5 : EMPLOI DU TEMPS -->
+                    <section id="view-schedule" class="hidden space-y-4">
+                        <h3 class="text-xl font-black text-slate-800">Emploi du Temps Hebdomadaire</h3>
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                            <div class="flex items-start justify-between border-b border-slate-100 pb-3">
+                                <div>
+                                    <span class="font-bold text-xs text-blue-600 uppercase tracking-wider">Lundi (08:30 - 11:30)</span>
+                                    <p class="font-bold text-base text-slate-900 mt-0.5">Électronique de Puissance — TP Hacheurs</p>
+                                    <p class="text-xs text-slate-500">Salle Labo GE-02 • Prof. O. Ba</p>
+                                </div>
+                                <span class="text-xs bg-blue-50 text-blue-700 font-bold px-3 py-1 rounded-full">Présentiel</span>
+                            </div>
+                            <div class="flex items-start justify-between border-b border-slate-100 pb-3">
+                                <div>
+                                    <span class="font-bold text-xs text-emerald-600 uppercase tracking-wider">Mardi (14:00 - 17:00)</span>
+                                    <p class="font-bold text-base text-slate-900 mt-0.5">Systèmes Embarqués — Programmation ESP32</p>
+                                    <p class="text-xs text-slate-500">Atelier Informatique 1 • Dr. Ndiaye</p>
+                                </div>
+                                <span class="text-xs bg-emerald-50 text-emerald-700 font-bold px-3 py-1 rounded-full">Projet Lab</span>
+                            </div>
+                            <div class="flex items-start justify-between border-b border-slate-100 pb-3">
+                                <div>
+                                    <span class="font-bold text-xs text-purple-600 uppercase tracking-wider">Mercredi (10:00 - 12:00)</span>
+                                    <p class="font-bold text-base text-slate-900 mt-0.5">Modélisation Machines — TD Park</p>
+                                    <p class="text-xs text-slate-500">Amphi A • Prof. Kane</p>
+                                </div>
+                                <span class="text-xs bg-purple-50 text-purple-700 font-bold px-3 py-1 rounded-full">Cours Magistral</span>
+                            </div>
+                        </div>
+                    </section>
+
+                </main>
+            </div>
+
+            <!-- FOOTER -->
+            <footer class="bg-white border-t border-slate-200 mt-auto py-4 text-center text-xs text-slate-500">
+                <div class="max-w-7xl mx-auto px-4">
+                    &copy; 2026 Portail Universitaire — École Supérieure Polytechnique. Tous droits réservés.
+                </div>
+            </footer>
+        </div>
+
     </div>
 
-    <!-- JAVASCRIPT POUR RENDRE LE SITE DYNAMIQUE ET INTERACTIF -->
+    <!-- JAVASCRIPT DYNAMIQUE DE TOUT LE PORTAIL -->
     <script>
-        // Données initiales
+        // --- ÉTAT GLOBAL DE L'APPLICATION ---
+        let authMode = 'login'; // 'login' ou 'register'
+        let currentUser = null; // { name, email, role }
+
+        // Données dynamiques des notes
         let gradesData = [
             { subject: "Électronique de Puissance", coeff: 4, note: 15.5 },
             { subject: "Systèmes Embarqués (ESP32)", coeff: 3, note: 16.5 },
@@ -196,61 +427,103 @@
             { subject: "Automatique & Asservissement", coeff: 3, note: 16.8 }
         ];
 
-        // Rendu des notes et statistiques
-        function renderGrades() {
-            const tbody = document.getElementById('grades-table-body');
-            tbody.innerHTML = '';
+        // Données dynamiques de la Liste à Faire (Todo)
+        let todoData = [
+            { id: 1, text: "Préparer le compte rendu du TP Hacheurs (Électronique de Puissance)", done: false },
+            { id: 2, text: "Configurer la connexion WiFi sur le module ESP32", done: true },
+            { id: 3, text: "Réviser la transformée de Laplace pour l'examen d'Automatique", done: false }
+        ];
 
-            let totalPoints = 0;
-            let totalCoeff = 0;
-            let countValide = 0;
+        // --- GESTION DE L'AUTHENTIFICATION (LOGIN / REGISTER) ---
+        function toggleAuthMode(mode) {
+            authMode = mode;
+            const btnLogin = document.getElementById('btn-tab-login');
+            const btnRegister = document.getElementById('btn-tab-register');
+            const fieldName = document.getElementById('field-fullname');
+            const submitBtn = document.getElementById('auth-submit-btn');
 
-            gradesData.forEach((item) => {
-                totalPoints += item.note * item.coeff;
-                totalCoeff += item.coeff;
-                if(item.note >= 10) countValide++;
-
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50";
-                tr.innerHTML = `
-                    <td class="px-6 py-4 font-semibold text-slate-900">${item.subject}</td>
-                    <td class="px-6 py-4">${item.coeff}</td>
-                    <td class="px-6 py-4 font-bold text-slate-900">${item.note.toFixed(1)} / 20</td>
-                    <td class="px-6 py-4 text-right">
-                        <span class="${item.note >= 10 ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'} text-xs px-2.5 py-1 rounded-full font-semibold">
-                            ${item.note >= 10 ? 'Validé' : 'Rattrapage'}
-                        </span>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-
-            const average = totalCoeff > 0 ? (totalPoints / totalCoeff).toFixed(1) : "0.0";
-            document.getElementById('stat-moyenne').innerText = `${average} / 20`;
-            document.getElementById('stat-modules').innerText = `${countValide} / ${gradesData.length}`;
+            if (mode === 'register') {
+                btnLogin.className = "flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-500 hover:text-slate-800";
+                btnRegister.className = "flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-700 bg-white shadow-sm";
+                fieldName.classList.remove('hidden');
+                submitBtn.innerText = "Créer mon Compte";
+            } else {
+                btnRegister.className = "flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-500 hover:text-slate-800";
+                btnLogin.className = "flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-700 bg-white shadow-sm";
+                fieldName.classList.add('hidden');
+                submitBtn.innerText = "Se Connecter";
+            }
         }
 
-        // Fonction d'ajout de note
-        function addGrade(event) {
+        function handleAuth(event) {
             event.preventDefault();
-            const subject = document.getElementById('subject').value;
-            const note = parseFloat(document.getElementById('note').value);
-            const coeff = parseInt(document.getElementById('coeff').value);
+            const email = document.getElementById('auth-email').value;
+            const role = document.querySelector('input[name="auth-role"]:checked').value;
+            let name = document.getElementById('auth-name').value;
 
-            gradesData.push({ subject, note, coeff });
-            renderGrades();
+            if (!name || authMode === 'login') {
+                name = role === 'teacher' ? "Prof. O. Ba" : "Amadou Diallo";
+            }
 
-            document.getElementById('grade-form').reset();
-            switchTab('grades');
+            loginUser(name, email, role);
         }
 
-        // Navigation entre les onglets
+        function loginAsDemo(role) {
+            if (role === 'teacher') {
+                loginUser("Prof. O. Ba", "enseignant@esp.sn", "teacher");
+            } else {
+                loginUser("Amadou Diallo", "amadou.diallo@esp.sn", "student");
+            }
+        }
+
+        function loginUser(name, email, role) {
+            currentUser = { name, email, role };
+
+            // Mise à jour de l'affichage UI selon le profil
+            document.getElementById('user-display-name').innerText = name;
+            document.getElementById('dash-welcome-name').innerText = name.split(' ')[0];
+            
+            // Initiales pour l'avatar
+            const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+            document.getElementById('user-avatar').innerText = initials;
+
+            if (role === 'teacher') {
+                document.getElementById('user-display-role').innerText = "Enseignant";
+                document.getElementById('dash-welcome-role').innerText = "Espace Enseignant — Gestion des cours et attribution des notes.";
+                document.getElementById('dash-role-tag').innerText = "Enseignant";
+                document.getElementById('sidebar-role-desc').innerText = "Connecté en tant qu'Enseignant (Gestion & Saisie des notes).";
+                document.getElementById('label-nav-grades').innerText = "Gestion des Notes";
+                document.getElementById('form-grade-title').innerHTML = `<i class="fa-solid fa-pen-to-square text-indigo-600"></i> Attribuer une note à un étudiant`;
+            } else {
+                document.getElementById('user-display-role').innerText = "Étudiant";
+                document.getElementById('dash-welcome-role').innerText = "Espace Étudiant — Consultation des notes et suivi du semestre.";
+                document.getElementById('dash-role-tag').innerText = "Étudiant";
+                document.getElementById('sidebar-role-desc').innerText = "Connecté en tant qu'Étudiant en Génie Électrique.";
+                document.getElementById('label-nav-grades').innerText = "Notes & Relevés";
+                document.getElementById('form-grade-title').innerHTML = `<i class="fa-solid fa-calculator text-blue-600"></i> Simuler / Ajouter une note au relevé`;
+            }
+
+            // Basculer d'écran
+            document.getElementById('auth-screen').classList.add('hidden');
+            document.getElementById('main-screen').classList.remove('hidden');
+
+            // Rafraîchir les données dynamiques
+            renderAll();
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('main-screen').classList.add('hidden');
+            document.getElementById('auth-screen').classList.remove('hidden');
+        }
+
+        // --- NAVIGATION INTERNE ---
         function switchTab(tabName) {
-            const views = ['dashboard', 'courses', 'grades', 'schedule'];
-            views.forEach(view => {
-                document.getElementById(`view-${view}`).classList.add('hidden');
-                document.getElementById(`nav-${view}`).classList.remove('active-tab');
-                document.getElementById(`nav-${view}`).classList.add('text-slate-600');
+            const tabs = ['dashboard', 'courses', 'grades', 'todo', 'schedule'];
+            tabs.forEach(tab => {
+                document.getElementById(`view-${tab}`).classList.add('hidden');
+                document.getElementById(`nav-${tab}`).classList.remove('active-tab');
+                document.getElementById(`nav-${tab}`).classList.add('text-slate-600');
             });
 
             document.getElementById(`view-${tabName}`).classList.remove('hidden');
@@ -258,8 +531,130 @@
             document.getElementById(`nav-${tabName}`).classList.remove('text-slate-600');
         }
 
-        // Initialisation
-        renderGrades();
+        // --- GESTION DYNAMIQUE DES NOTES ---
+        function addGrade(event) {
+            event.preventDefault();
+            const subject = document.getElementById('grade-subject').value;
+            const note = parseFloat(document.getElementById('grade-val').value);
+            const coeff = parseInt(document.getElementById('grade-coeff').value);
+
+            gradesData.push({ subject, note, coeff });
+            document.getElementById('grade-form').reset();
+            renderGrades();
+        }
+
+        function renderGrades() {
+            const tbody = document.getElementById('grades-table-body');
+            const quickDiv = document.getElementById('dash-quick-grades');
+            tbody.innerHTML = '';
+            quickDiv.innerHTML = '';
+
+            let totalPoints = 0;
+            let totalCoeff = 0;
+
+            gradesData.forEach((item, index) => {
+                totalPoints += item.note * item.coeff;
+                totalCoeff += item.coeff;
+
+                // Ligne du Tableau Principal
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition";
+                tr.innerHTML = `
+                    <td class="px-6 py-4 font-bold text-slate-900">${item.subject}</td>
+                    <td class="px-6 py-4">${item.coeff}</td>
+                    <td class="px-6 py-4 font-black text-slate-900">${item.note.toFixed(1)} / 20</td>
+                    <td class="px-6 py-4 text-right">
+                        <span class="${item.note >= 10 ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'} text-xs px-2.5 py-1 rounded-full font-bold">
+                            ${item.note >= 10 ? 'Validé' : 'Rattrapage'}
+                        </span>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+
+                // Aperçu Dashboard (4 premiers éléments)
+                if (index < 4) {
+                    const card = document.createElement('div');
+                    card.className = "bg-slate-50 p-3 rounded-xl border border-slate-200/60 flex items-center justify-between";
+                    card.innerHTML = `
+                        <div>
+                            <p class="font-bold text-xs text-slate-800">${item.subject}</p>
+                            <p class="text-xs text-slate-400">Coeff. ${item.coeff}</p>
+                        </div>
+                        <span class="font-black text-sm ${item.note >= 10 ? 'text-emerald-600' : 'text-red-600'}">${item.note.toFixed(1)}/20</span>
+                    `;
+                    quickDiv.appendChild(card);
+                }
+            });
+
+            const average = totalCoeff > 0 ? (totalPoints / totalCoeff).toFixed(1) : "0.0";
+            document.getElementById('stat-moyenne').innerText = `${average} / 20`;
+            document.getElementById('stat-modules-count').innerText = gradesData.length;
+            document.getElementById('grade-count-badge').innerText = `${gradesData.length} Notes`;
+        }
+
+        // --- GESTION DYNAMIQUE DE LA LISTE DE TÂCHES (TODO) ---
+        function addTodo(event) {
+            event.preventDefault();
+            const textInput = document.getElementById('todo-text');
+            if (!textInput.value.trim()) return;
+
+            todoData.push({
+                id: Date.now(),
+                text: textInput.value.trim(),
+                done: false
+            });
+
+            textInput.value = '';
+            renderTodos();
+        }
+
+        function toggleTodo(id) {
+            const item = todoData.find(t => t.id === id);
+            if (item) item.done = !item.done;
+            renderTodos();
+        }
+
+        function deleteTodo(id) {
+            todoData = todoData.filter(t => t.id !== id);
+            renderTodos();
+        }
+
+        function renderTodos() {
+            const container = document.getElementById('todo-list-container');
+            container.innerHTML = '';
+
+            let pendingCount = 0;
+
+            if (todoData.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">Aucune tâche en cours pour le moment.</p>`;
+            } else {
+                todoData.forEach(item => {
+                    if (!item.done) pendingCount++;
+
+                    const div = document.createElement('div');
+                    div.className = `flex items-center justify-between p-3 rounded-xl border ${item.done ? 'bg-slate-50 border-slate-200 opacity-60' : 'bg-white border-slate-200'} transition`;
+                    div.innerHTML = `
+                        <div class="flex items-center space-x-3 cursor-pointer" onclick="toggleTodo(${item.id})">
+                            <i class="fa-regular ${item.done ? 'fa-square-check text-emerald-600 text-lg' : 'fa-square text-slate-300 text-lg'}"></i>
+                            <span class="text-sm font-semibold ${item.done ? 'line-through text-slate-400' : 'text-slate-800'}">${item.text}</span>
+                        </div>
+                        <button onclick="deleteTodo(${item.id})" title="Supprimer" class="text-slate-300 hover:text-red-500 text-xs p-1 transition">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    `;
+                    container.appendChild(div);
+                });
+            }
+
+            document.getElementById('badge-todo-count').innerText = pendingCount;
+            document.getElementById('stat-pending-todos').innerText = pendingCount;
+        }
+
+        // Initialiser tout au chargement
+        function renderAll() {
+            renderGrades();
+            renderTodos();
+        }
     </script>
 </body>
 </html>
