@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  STUDENT
+  PROFESSOR
+  ADMIN
+}
+
+model User {
+  id               String            @id @default(uuid())
+  email            String            @unique
+  password         String
+  role             Role              @default(STUDENT)
+  firstName        String
+  lastName         String
+  studentProfile   StudentProfile?
+  professorProfile ProfessorProfile?
+}
+
+model StudentProfile {
+  id      String         @id @default(uuid())
+  userId  String         @unique
+  user    User           @relation(fields: [userId], references: [id])
+  modules CourseModule[]
+  grades  Grade[]
+}
+
+model ProfessorProfile {
+  id            String         @id @default(uuid())
+  userId        String         @unique
+  user          User           @relation(fields: [userId], references: [id])
+  taughtModules CourseModule[]
+}
+
+model CourseModule {
+  id          String            @id @default(uuid())
+  code        String            @unique
+  name        String
+  professorId String?
+  professor   ProfessorProfile? @relation(fields: [professorId], references: [id])
+  students    StudentProfile[]
+  grades      Grade[]
+  schedules   Schedule[]
+}
+
+model Grade {
+  id        String         @id @default(uuid())
+  value     Float
+  studentId String
+  student   StudentProfile @relation(fields: [studentId], references: [id])
+  moduleId  String
+  module    CourseModule   @relation(fields: [moduleId], references: [id])
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  @@unique([studentId, moduleId])
+}
+
+model Schedule {
+  id        String       @id @default(uuid())
+  moduleId  String
+  module    CourseModule @relation(fields: [moduleId], references: [id])
+  startTime DateTime
+  endTime   DateTime
+  room      String
+}
