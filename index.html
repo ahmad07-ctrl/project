@@ -3,52 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portail Universitaire - Scolarité & Notes</title>
-    <!-- Tailwind CSS pour un design propre et fluide -->
+    <title>Portail Universitaire - Génie Électrique</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         * { font-family: 'Plus Jakarta Sans', sans-serif; box-sizing: border-box; }
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(226, 232, 240, 0.8); }
-        .active-nav { background-color: #3b82f6 !important; color: #ffffff !important; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
+        .active-tab { background-color: #3b82f6 !important; color: #ffffff !important; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased overflow-x-hidden">
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased">
 
-    <!-- BARRE DE NAVIGATION TOP -->
+    <!-- NAVBAR -->
     <header class="bg-slate-900 text-white sticky top-0 z-50 shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <div class="bg-blue-600 text-white p-2 rounded-lg flex items-center justify-center font-bold text-xl">
-                    <i class="fa-solid font-bold fa-graduation-cap"></i>
+                <div class="bg-blue-600 text-white p-2 rounded-lg font-bold text-xl">
+                    <i class="fa-solid fa-graduation-cap"></i>
                 </div>
                 <div>
                     <h1 class="font-bold text-lg leading-tight">Portail Universitaire</h1>
-                    <p class="text-xs text-slate-400">Génie Électrique & Ingénierie</p>
+                    <p class="text-xs text-slate-400">École Supérieure Polytechnique</p>
                 </div>
             </div>
 
             <div class="flex items-center space-x-4">
-                <div class="relative hidden sm:block">
-                    <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                    <input type="text" placeholder="Rechercher cours, notes..." class="bg-slate-800 text-slate-200 text-sm rounded-full pl-9 pr-4 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 w-64">
-                </div>
-                <button class="relative p-2 text-slate-300 hover:text-white rounded-full hover:bg-slate-800">
-                    <i class="fa-solid fa-bell"></i>
-                    <span class="absolute top-1 right-1 w-2 h-2 bg-blue-500 rounded-full"></span>
-                </button>
                 <div class="flex items-center space-x-3 border-l border-slate-700 pl-4">
                     <div class="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center font-bold text-sm">
                         AD
                     </div>
                     <div class="hidden md:block text-left">
                         <div class="text-sm font-semibold leading-none">Amadou Diallo</div>
-                        <div class="text-xs text-slate-400 mt-1">Étudiant</div>
+                        <div class="text-xs text-slate-400 mt-1">Génie Électrique</div>
                     </div>
                 </div>
             </div>
@@ -57,169 +43,223 @@
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full flex flex-col md:flex-row gap-8">
         
-        <!-- SIDEBAR -->
+        <!-- SIDEBAR DE NAVIGATION -->
         <aside class="w-full md:w-64 flex-shrink-0 space-y-2">
             <div class="bg-white rounded-xl p-3 shadow-sm border border-slate-200 space-y-1">
-                <a href="#" class="active-nav flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium transition">
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="active-tab w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium transition text-left">
                     <i class="fa-solid fa-chart-pie w-5"></i>
                     <span>Tableau de bord</span>
-                </a>
-                <a href="#" class="text-slate-600 hover:bg-slate-100 flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium transition">
+                </button>
+                <button onclick="switchTab('courses')" id="nav-courses" class="text-slate-600 hover:bg-slate-100 w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium transition text-left">
                     <i class="fa-solid fa-book-open w-5"></i>
                     <span>Mes Cours</span>
-                </a>
-                <a href="#" class="text-slate-600 hover:bg-slate-100 flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium transition">
+                </button>
+                <button onclick="switchTab('grades')" id="nav-grades" class="text-slate-600 hover:bg-slate-100 w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium transition text-left">
                     <i class="fa-solid fa-clipboard-list w-5"></i>
                     <span>Notes & Relevés</span>
-                </a>
-                <a href="#" class="text-slate-600 hover:bg-slate-100 flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium transition">
+                </button>
+                <button onclick="switchTab('schedule')" id="nav-schedule" class="text-slate-600 hover:bg-slate-100 w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium transition text-left">
                     <i class="fa-solid fa-calendar-alt w-5"></i>
                     <span>Emploi du temps</span>
-                </a>
-                <a href="#" class="text-slate-600 hover:bg-slate-100 flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium transition">
-                    <i class="fa-solid fa-folder-open w-5"></i>
-                    <span>Ressources</span>
-                </a>
-            </div>
-
-            <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-900 space-y-2">
-                <div class="font-bold flex items-center gap-2">
-                    <i class="fa-solid fa-circle-info text-blue-600"></i> Session Active
-                </div>
-                <p class="text-xs text-blue-700">Semestre en cours : Semestre 2. Examen final prévu en Juin.</p>
+                </button>
             </div>
         </aside>
 
-        <!-- MAIN CONTENT -->
+        <!-- CONTENU DYNAMIQUE -->
         <main class="flex-1 space-y-6">
             
-            <!-- BANNIÈRE BIENVENUE -->
-            <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-6 text-white shadow-lg flex flex-col md:flex-row items-center justify-between gap-4">
-                <div>
+            <!-- VUE 1 : TABLEAU DE BORD -->
+            <section id="view-dashboard" class="space-y-6">
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-6 text-white shadow-lg">
                     <h2 class="text-2xl font-bold">Bienvenue sur votre espace, Amadou 👋</h2>
-                    <p class="text-blue-100 text-sm mt-1">Consultez l'avancement de vos modules et vos dernières notes en Génie Électrique.</p>
-                </div>
-                <button class="bg-white text-blue-600 font-semibold px-4 py-2 rounded-lg text-sm shadow hover:bg-blue-50 transition whitespace-nowrap">
-                    Télécharger Relevé (PDF)
-                </button>
-            </div>
-
-            <!-- CARDS STATISTIQUES -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
-                    <div>
-                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Moyenne Générale</p>
-                        <p class="text-2xl font-extrabold text-slate-900 mt-1">15.8 / 20</p>
-                    </div>
-                    <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center text-xl font-bold">
-                        <i class="fa-solid fa-chart-line"></i>
-                    </div>
+                    <p class="text-blue-100 text-sm mt-1">Consultez l'avancement de vos modules et gérez vos notes en temps réel.</p>
                 </div>
 
-                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
-                    <div>
-                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Crédits Valider (ECTS)</p>
-                        <p class="text-2xl font-extrabold text-slate-900 mt-1">45 / 60</p>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-semibold text-slate-500 uppercase">Moyenne Générale</p>
+                            <p id="stat-moyenne" class="text-2xl font-extrabold text-slate-900 mt-1">15.8 / 20</p>
+                        </div>
+                        <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
                     </div>
-                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-xl font-bold">
-                        <i class="fa-solid fa-award"></i>
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-semibold text-slate-500 uppercase">Crédits (ECTS)</p>
+                            <p class="text-2xl font-extrabold text-slate-900 mt-1">45 / 60</p>
+                        </div>
+                        <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-award"></i>
+                        </div>
                     </div>
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-semibold text-slate-500 uppercase">Modules Validés</p>
+                            <p id="stat-modules" class="text-2xl font-extrabold text-slate-900 mt-1">4 / 4</p>
+                        </div>
+                        <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-check-circle"></i>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VUE 2 : MES COURS -->
+            <section id="view-courses" class="hidden space-y-4">
+                <h3 class="text-xl font-bold text-slate-800">Mes Modules d'Enseignement</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <span class="text-xs bg-blue-100 text-blue-700 font-semibold px-2.5 py-1 rounded-full">GE-401</span>
+                        <h4 class="font-bold text-lg mt-2">Électronique de Puissance</h4>
+                        <p class="text-sm text-slate-500 mt-1">Hacheurs, Onduleurs, Redresseurs et conversion d'énergie.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <span class="text-xs bg-emerald-100 text-emerald-700 font-semibold px-2.5 py-1 rounded-full">GE-402</span>
+                        <h4 class="font-bold text-lg mt-2">Systèmes Embarqués (ESP32)</h4>
+                        <p class="text-sm text-slate-500 mt-1">Programmation C/C++, Microcontrôleurs et IOT.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <span class="text-xs bg-purple-100 text-purple-700 font-semibold px-2.5 py-1 rounded-full">GE-403</span>
+                        <h4 class="font-bold text-lg mt-2">Modélisation des Machines</h4>
+                        <p class="text-sm text-slate-500 mt-1">Machines asynchrones, synchrones et régulation.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <span class="text-xs bg-amber-100 text-amber-700 font-semibold px-2.5 py-1 rounded-full">GE-404</span>
+                        <h4 class="font-bold text-lg mt-2">Automatique & Asservissement</h4>
+                        <p class="text-sm text-slate-500 mt-1">Systèmes linéaires, Transformée de Laplace, Correcteurs PID.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VUE 3 : NOTES ET CALCULATEUR -->
+            <section id="view-grades" class="hidden space-y-6">
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4"><i class="fa-solid fa-plus-circle text-blue-600 mr-2"></i>Ajouter une note pour tester le calcul</h3>
+                    <form id="grade-form" onsubmit="addGrade(event)" class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                        <input type="text" id="subject" placeholder="Matière" required class="border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        <input type="number" id="note" step="0.5" min="0" max="20" placeholder="Note / 20" required class="border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        <input type="number" id="coeff" min="1" max="10" placeholder="Coefficient" required class="border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        <button type="submit" class="bg-blue-600 text-white font-semibold rounded-lg px-4 py-2 text-sm hover:bg-blue-700 transition">Ajouter</button>
+                    </form>
                 </div>
 
-                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
-                    <div>
-                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Assiduité</p>
-                        <p class="text-2xl font-extrabold text-slate-900 mt-1">98 %</p>
-                    </div>
-                    <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center text-xl font-bold">
-                        <i class="fa-solid fa-user-check"></i>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TABLEAU DES MODULES & NOTES -->
-            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
-                    <h3 class="font-bold text-slate-800">Détails des Modules - Semestre 2</h3>
-                    <span class="text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full font-medium">5 Modules</span>
-                </div>
-                <div class="overflow-x-auto">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
                     <table class="w-full text-left text-sm text-slate-600">
-                        <thead class="bg-slate-50 text-xs font-semibold text-slate-500 uppercase border-b border-slate-200">
+                        <thead class="bg-slate-50 text-xs font-semibold text-slate-500 uppercase border-b">
                             <tr>
-                                <th class="px-6 py-3">Matière / Module</th>
+                                <th class="px-6 py-3">Matière</th>
                                 <th class="px-6 py-3">Coeff.</th>
-                                <th class="px-6 py-3">Contrôle Continu</th>
-                                <th class="px-6 py-3">Examen Final</th>
-                                <th class="px-6 py-3">Moyenne</th>
+                                <th class="px-6 py-3">Note</th>
                                 <th class="px-6 py-3 text-right">Statut</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-200">
-                            <tr class="hover:bg-slate-50">
-                                <td class="px-6 py-4 font-semibold text-slate-900">Électronique de Puissance</td>
-                                <td class="px-6 py-4">4</td>
-                                <td class="px-6 py-4">16.0 / 20</td>
-                                <td class="px-6 py-4">15.5 / 20</td>
-                                <td class="px-6 py-4 font-bold text-slate-900">15.7 / 20</td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="bg-emerald-100 text-emerald-700 text-xs px-2.5 py-1 rounded-full font-semibold">Validé</span>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-slate-50">
-                                <td class="px-6 py-4 font-semibold text-slate-900">Systèmes Embarqués (ESP32 / Microcontrôleurs)</td>
-                                <td class="px-6 py-4">3</td>
-                                <td class="px-6 py-4">17.5 / 20</td>
-                                <td class="px-6 py-4">16.0 / 20</td>
-                                <td class="px-6 py-4 font-bold text-slate-900">16.6 / 20</td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="bg-emerald-100 text-emerald-700 text-xs px-2.5 py-1 rounded-full font-semibold">Validé</span>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-slate-50">
-                                <td class="px-6 py-4 font-semibold text-slate-900">Modélisation des Machines Électriques</td>
-                                <td class="px-6 py-4">3</td>
-                                <td class="px-6 py-4">14.0 / 20</td>
-                                <td class="px-6 py-4">15.0 / 20</td>
-                                <td class="px-6 py-4 font-bold text-slate-900">14.6 / 20</td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="bg-emerald-100 text-emerald-700 text-xs px-2.5 py-1 rounded-full font-semibold">Validé</span>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-slate-50">
-                                <td class="px-6 py-4 font-semibold text-slate-900">Automatique & Asservissement</td>
-                                <td class="px-6 py-4">3</td>
-                                <td class="px-6 py-4">16.5 / 20</td>
-                                <td class="px-6 py-4">17.0 / 20</td>
-                                <td class="px-6 py-4 font-bold text-slate-900">16.8 / 20</td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="bg-emerald-100 text-emerald-700 text-xs px-2.5 py-1 rounded-full font-semibold">Validé</span>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-slate-50">
-                                <td class="px-6 py-4 font-semibold text-slate-900">Anglais Technique & Communication</td>
-                                <td class="px-6 py-4">2</td>
-                                <td class="px-6 py-4">15.0 / 20</td>
-                                <td class="px-6 py-4">15.0 / 20</td>
-                                <td class="px-6 py-4 font-bold text-slate-900">15.0 / 20</td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="bg-emerald-100 text-emerald-700 text-xs px-2.5 py-1 rounded-full font-semibold">Validé</span>
-                                </td>
-                            </tr>
+                        <tbody id="grades-table-body" class="divide-y divide-slate-200">
+                            <!-- Les lignes seront insérées dynamiquement via JavaScript -->
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </section>
+
+            <!-- VUE 4 : EMPLOI DU TEMPS -->
+            <section id="view-schedule" class="hidden space-y-4">
+                <h3 class="text-xl font-bold text-slate-800">Planning de la semaine</h3>
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-3">
+                    <div class="flex items-center justify-between border-b pb-3">
+                        <div>
+                            <span class="font-bold text-blue-600">Lundi 08:30 - 11:30</span>
+                            <p class="font-medium text-slate-800">Électronique de Puissance (TP)</p>
+                        </div>
+                        <span class="text-xs bg-slate-100 text-slate-600 px-3 py-1 rounded-full">Salle Labo 2</span>
+                    </div>
+                    <div class="flex items-center justify-between border-b pb-3">
+                        <div>
+                            <span class="font-bold text-emerald-600">Mardi 14:00 - 17:00</span>
+                            <p class="font-medium text-slate-800">Systèmes Embarqués ESP32 (Projet)</p>
+                        </div>
+                        <span class="text-xs bg-slate-100 text-slate-600 px-3 py-1 rounded-full">Atelier Info</span>
+                    </div>
+                </div>
+            </section>
 
         </main>
     </div>
 
-    <!-- FOOTER -->
-    <footer class="bg-white border-t border-slate-200 mt-auto py-4 text-center text-xs text-slate-500">
-        <div class="max-w-7xl mx-auto px-4">
-            &copy; 2026 Portail Universitaire — École Supérieure Polytechnique. Tous droits réservés.
-        </div>
-    </footer>
+    <!-- JAVASCRIPT POUR RENDRE LE SITE DYNAMIQUE ET INTERACTIF -->
+    <script>
+        // Données initiales
+        let gradesData = [
+            { subject: "Électronique de Puissance", coeff: 4, note: 15.5 },
+            { subject: "Systèmes Embarqués (ESP32)", coeff: 3, note: 16.5 },
+            { subject: "Modélisation des Machines", coeff: 3, note: 14.5 },
+            { subject: "Automatique & Asservissement", coeff: 3, note: 16.8 }
+        ];
 
+        // Rendu des notes et statistiques
+        function renderGrades() {
+            const tbody = document.getElementById('grades-table-body');
+            tbody.innerHTML = '';
+
+            let totalPoints = 0;
+            let totalCoeff = 0;
+            let countValide = 0;
+
+            gradesData.forEach((item) => {
+                totalPoints += item.note * item.coeff;
+                totalCoeff += item.coeff;
+                if(item.note >= 10) countValide++;
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50";
+                tr.innerHTML = `
+                    <td class="px-6 py-4 font-semibold text-slate-900">${item.subject}</td>
+                    <td class="px-6 py-4">${item.coeff}</td>
+                    <td class="px-6 py-4 font-bold text-slate-900">${item.note.toFixed(1)} / 20</td>
+                    <td class="px-6 py-4 text-right">
+                        <span class="${item.note >= 10 ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'} text-xs px-2.5 py-1 rounded-full font-semibold">
+                            ${item.note >= 10 ? 'Validé' : 'Rattrapage'}
+                        </span>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            const average = totalCoeff > 0 ? (totalPoints / totalCoeff).toFixed(1) : "0.0";
+            document.getElementById('stat-moyenne').innerText = `${average} / 20`;
+            document.getElementById('stat-modules').innerText = `${countValide} / ${gradesData.length}`;
+        }
+
+        // Fonction d'ajout de note
+        function addGrade(event) {
+            event.preventDefault();
+            const subject = document.getElementById('subject').value;
+            const note = parseFloat(document.getElementById('note').value);
+            const coeff = parseInt(document.getElementById('coeff').value);
+
+            gradesData.push({ subject, note, coeff });
+            renderGrades();
+
+            document.getElementById('grade-form').reset();
+            switchTab('grades');
+        }
+
+        // Navigation entre les onglets
+        function switchTab(tabName) {
+            const views = ['dashboard', 'courses', 'grades', 'schedule'];
+            views.forEach(view => {
+                document.getElementById(`view-${view}`).classList.add('hidden');
+                document.getElementById(`nav-${view}`).classList.remove('active-tab');
+                document.getElementById(`nav-${view}`).classList.add('text-slate-600');
+            });
+
+            document.getElementById(`view-${tabName}`).classList.remove('hidden');
+            document.getElementById(`nav-${tabName}`).classList.add('active-tab');
+            document.getElementById(`nav-${tabName}`).classList.remove('text-slate-600');
+        }
+
+        // Initialisation
+        renderGrades();
+    </script>
 </body>
 </html>
