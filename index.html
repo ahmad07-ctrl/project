@@ -18,3 +18,208 @@
         .active-nav { background-color: #3b82f6 !important; color: #ffffff !important; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
     </style>
 </head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased overflow-x-hidden">
+
+    <!-- BARRE DE NAVIGATION TOP -->
+    <header class="bg-slate-900 text-white sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-blue-600 text-white p-2 rounded-lg flex items-center justify-center font-bold text-xl">
+                    <i class="fa-solid font-bold fa-graduation-cap"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">Portail Universitaire</h1>
+                    <p class="text-xs text-slate-400">Génie Électrique & Ingénierie</p>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <div class="relative hidden sm:block">
+                    <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                    <input type="text" placeholder="Rechercher cours, notes..." class="bg-slate-800 text-slate-200 text-sm rounded-full pl-9 pr-4 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 w-64">
+                </div>
+                <button class="relative p-2 text-slate-300 hover:text-white rounded-full hover:bg-slate-800">
+                    <i class="fa-solid fa-bell"></i>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-blue-500 rounded-full"></span>
+                </button>
+                <div class="flex items-center space-x-3 border-l border-slate-700 pl-4">
+                    <div class="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center font-bold text-sm">
+                        AD
+                    </div>
+                    <div class="hidden md:block text-left">
+                        <div class="text-sm font-semibold leading-none">Amadou Diallo</div>
+                        <div class="text-xs text-slate-400 mt-1">Étudiant</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full flex flex-col md:flex-row gap-8">
+        
+        <!-- SIDEBAR -->
+        <aside class="w-full md:w-64 flex-shrink-0 space-y-2">
+            <div class="bg-white rounded-xl p-3 shadow-sm border border-slate-200 space-y-1">
+                <a href="#" class="active-nav flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium transition">
+                    <i class="fa-solid fa-chart-pie w-5"></i>
+                    <span>Tableau de bord</span>
+                </a>
+                <a href="#" class="text-slate-600 hover:bg-slate-100 flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium transition">
+                    <i class="fa-solid fa-book-open w-5"></i>
+                    <span>Mes Cours</span>
+                </a>
+                <a href="#" class="text-slate-600 hover:bg-slate-100 flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium transition">
+                    <i class="fa-solid fa-clipboard-list w-5"></i>
+                    <span>Notes & Relevés</span>
+                </a>
+                <a href="#" class="text-slate-600 hover:bg-slate-100 flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium transition">
+                    <i class="fa-solid fa-calendar-alt w-5"></i>
+                    <span>Emploi du temps</span>
+                </a>
+                <a href="#" class="text-slate-600 hover:bg-slate-100 flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium transition">
+                    <i class="fa-solid fa-folder-open w-5"></i>
+                    <span>Ressources</span>
+                </a>
+            </div>
+
+            <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-900 space-y-2">
+                <div class="font-bold flex items-center gap-2">
+                    <i class="fa-solid fa-circle-info text-blue-600"></i> Session Active
+                </div>
+                <p class="text-xs text-blue-700">Semestre en cours : Semestre 2. Examen final prévu en Juin.</p>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="flex-1 space-y-6">
+            
+            <!-- BANNIÈRE BIENVENUE -->
+            <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-6 text-white shadow-lg flex flex-col md:flex-row items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold">Bienvenue sur votre espace, Amadou 👋</h2>
+                    <p class="text-blue-100 text-sm mt-1">Consultez l'avancement de vos modules et vos dernières notes en Génie Électrique.</p>
+                </div>
+                <button class="bg-white text-blue-600 font-semibold px-4 py-2 rounded-lg text-sm shadow hover:bg-blue-50 transition whitespace-nowrap">
+                    Télécharger Relevé (PDF)
+                </button>
+            </div>
+
+            <!-- CARDS STATISTIQUES -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Moyenne Générale</p>
+                        <p class="text-2xl font-extrabold text-slate-900 mt-1">15.8 / 20</p>
+                    </div>
+                    <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Crédits Valider (ECTS)</p>
+                        <p class="text-2xl font-extrabold text-slate-900 mt-1">45 / 60</p>
+                    </div>
+                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-award"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Assiduité</p>
+                        <p class="text-2xl font-extrabold text-slate-900 mt-1">98 %</p>
+                    </div>
+                    <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-user-check"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABLEAU DES MODULES & NOTES -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+                    <h3 class="font-bold text-slate-800">Détails des Modules - Semestre 2</h3>
+                    <span class="text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full font-medium">5 Modules</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-slate-600">
+                        <thead class="bg-slate-50 text-xs font-semibold text-slate-500 uppercase border-b border-slate-200">
+                            <tr>
+                                <th class="px-6 py-3">Matière / Module</th>
+                                <th class="px-6 py-3">Coeff.</th>
+                                <th class="px-6 py-3">Contrôle Continu</th>
+                                <th class="px-6 py-3">Examen Final</th>
+                                <th class="px-6 py-3">Moyenne</th>
+                                <th class="px-6 py-3 text-right">Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200">
+                            <tr class="hover:bg-slate-50">
+                                <td class="px-6 py-4 font-semibold text-slate-900">Électronique de Puissance</td>
+                                <td class="px-6 py-4">4</td>
+                                <td class="px-6 py-4">16.0 / 20</td>
+                                <td class="px-6 py-4">15.5 / 20</td>
+                                <td class="px-6 py-4 font-bold text-slate-900">15.7 / 20</td>
+                                <td class="px-6 py-4 text-right">
+                                    <span class="bg-emerald-100 text-emerald-700 text-xs px-2.5 py-1 rounded-full font-semibold">Validé</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="px-6 py-4 font-semibold text-slate-900">Systèmes Embarqués (ESP32 / Microcontrôleurs)</td>
+                                <td class="px-6 py-4">3</td>
+                                <td class="px-6 py-4">17.5 / 20</td>
+                                <td class="px-6 py-4">16.0 / 20</td>
+                                <td class="px-6 py-4 font-bold text-slate-900">16.6 / 20</td>
+                                <td class="px-6 py-4 text-right">
+                                    <span class="bg-emerald-100 text-emerald-700 text-xs px-2.5 py-1 rounded-full font-semibold">Validé</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="px-6 py-4 font-semibold text-slate-900">Modélisation des Machines Électriques</td>
+                                <td class="px-6 py-4">3</td>
+                                <td class="px-6 py-4">14.0 / 20</td>
+                                <td class="px-6 py-4">15.0 / 20</td>
+                                <td class="px-6 py-4 font-bold text-slate-900">14.6 / 20</td>
+                                <td class="px-6 py-4 text-right">
+                                    <span class="bg-emerald-100 text-emerald-700 text-xs px-2.5 py-1 rounded-full font-semibold">Validé</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="px-6 py-4 font-semibold text-slate-900">Automatique & Asservissement</td>
+                                <td class="px-6 py-4">3</td>
+                                <td class="px-6 py-4">16.5 / 20</td>
+                                <td class="px-6 py-4">17.0 / 20</td>
+                                <td class="px-6 py-4 font-bold text-slate-900">16.8 / 20</td>
+                                <td class="px-6 py-4 text-right">
+                                    <span class="bg-emerald-100 text-emerald-700 text-xs px-2.5 py-1 rounded-full font-semibold">Validé</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="px-6 py-4 font-semibold text-slate-900">Anglais Technique & Communication</td>
+                                <td class="px-6 py-4">2</td>
+                                <td class="px-6 py-4">15.0 / 20</td>
+                                <td class="px-6 py-4">15.0 / 20</td>
+                                <td class="px-6 py-4 font-bold text-slate-900">15.0 / 20</td>
+                                <td class="px-6 py-4 text-right">
+                                    <span class="bg-emerald-100 text-emerald-700 text-xs px-2.5 py-1 rounded-full font-semibold">Validé</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-slate-200 mt-auto py-4 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4">
+            &copy; 2026 Portail Universitaire — École Supérieure Polytechnique. Tous droits réservés.
+        </div>
+    </footer>
+
+</body>
+</html>
